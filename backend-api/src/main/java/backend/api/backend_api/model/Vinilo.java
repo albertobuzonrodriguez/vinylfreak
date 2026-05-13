@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "vinilos")
@@ -22,22 +23,26 @@ public class Vinilo {
     @Column(nullable = false)
     private String artista;
 
-    @Column(columnDefinition = "TEXT") // Para sellos largos
+    @Column(columnDefinition = "TEXT")
     private String sello;
 
     @Column(name = "anio_lanzamiento")
     private Integer anioLanzamiento;
 
-    @Column(columnDefinition = "TEXT") // Para géneros largos
+    @Column(columnDefinition = "TEXT")
     private String genero;
 
-    @Column(columnDefinition = "TEXT") // Para estilos largos
+    @Column(columnDefinition = "TEXT")
     private String estilo;
 
-    @Column(name = "url_portada", columnDefinition = "TEXT") // <--- ESTO ES CLAVE
+    @Column(name = "url_portada", columnDefinition = "TEXT")
     private String urlPortada;
 
-    @Column(unique = true)
-    private Long discogsId; // ID único de la API externa
+    @Column(name = "discogs_id", unique = true)
+    private Long discogsId;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "usuario_id", nullable = true) // Cambiado a true para evitar errores 500 al crear
+    @JsonIgnoreProperties({"coleccion", "siguiendo", "seguidores", "password"})
+    private Usuario usuario;
 }

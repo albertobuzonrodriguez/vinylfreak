@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -17,36 +18,42 @@ public class ColeccionController {
     @Autowired
     private ColeccionService coleccionService;
 
-    // MÉTODO NUEVO: Para añadir desde el buscador de Discogs
-    // Recibe el objeto Vinilo en el cuerpo y los datos del usuario por parámetro
+    /**
+     * Añade un vinilo desde el buscador de Discogs a la colección del usuario.
+     */
     @PostMapping("/add-from-discogs")
     public ResponseEntity<ColeccionItem> añadirDesdeDiscogs(
             @RequestBody Vinilo vinilo, 
             @RequestParam Long usuarioId,
             @RequestParam String estado) {
         
-        ColeccionItem nuevoItem = coleccionService.agregarDesdeDiscogs(vinilo, usuarioId, estado);
-        return ResponseEntity.ok(nuevoItem);
+        try {
+            ColeccionItem nuevoItem = coleccionService.agregarDesdeDiscogs(vinilo, usuarioId, estado);
+            return ResponseEntity.ok(nuevoItem);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
-    // Tu método original (por si quieres añadir discos manualmente)
-    @PostMapping
-    public ColeccionItem añadirDisco(@RequestBody ColeccionItem item) {
-        return coleccionService.agregarAVitrina(item);
-    }
-
+    /**
+     * Obtiene todos los ítems de la biblioteca de un usuario específico.
+     */
     @GetMapping("/usuario/{id}")
     public List<ColeccionItem> verBiblioteca(@PathVariable Long id) {
+        // Asegúrate de que el método en ColeccionService se llame exactamente así
         return coleccionService.obtenerBibliotecaUsuario(id);
     }
 
+    /**
+     * Elimina un ítem de la colección.
+     */
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<?> eliminarItem(@PathVariable Long id) {
         try {
             coleccionService.eliminarPorId(id); 
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró el item");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró el ítem a eliminar");
         }
     }
 }

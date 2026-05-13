@@ -5,6 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "coleccion_items")
 @Data
@@ -16,26 +23,30 @@ public class ColeccionItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Relación Muchos a Uno: Muchos items pueden pertenecer a un usuario
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "usuario_id", nullable = false)
+    @JsonIgnoreProperties({ "coleccion", "siguiendo", "seguidores", "password", "email" })
     private Usuario usuario;
 
-    // Relación Muchos a Uno: Muchos items pueden referenciar al mismo vinilo del catálogo
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vinilo_id", nullable = false)
+    @org.hibernate.annotations.NotFound(action = org.hibernate.annotations.NotFoundAction.IGNORE)
     private Vinilo vinilo;
 
-    // Campos específicos de la copia del usuario
     @Column(nullable = false)
-    private String estadoDisco; // Ej: "Mint", "Near Mint", "VG+"
+    private String estadoDisco;
 
     private String estadoPortada;
-
-    private Double precioTasado; // Importante para la funcionalidad de "tasar biblioteca"
-
-    private Boolean enVenta = false; // Por defecto no está en venta
-
-    @Column(length = 500)
+    private Double precioTasado;
+    private Boolean enVenta = false;
     private String observaciones;
+
+    @ElementCollection
+    @CollectionTable(name = "item_likes", joinColumns = @JoinColumn(name = "item_id"))
+    @Column(name = "usuario_id")
+    private Set<Long> likesUsuarios = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "item_id")
+    private List<Comentario> comentarios = new ArrayList<>();
 }
