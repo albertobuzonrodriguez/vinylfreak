@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200") // Para que Angular pueda conectar
+@CrossOrigin(origins = {"http://localhost:4200", "https://vinylfreak.onrender.com"})
 public class ChatController {
 
     @Autowired
