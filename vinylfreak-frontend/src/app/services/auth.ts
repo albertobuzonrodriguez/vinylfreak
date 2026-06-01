@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'https://vinylfreak-backend.onrender.com/usuarios';
+  private apiUrl = `${environment.apiUrl}/api/usuarios`;
 
   // Cambiamos EventEmitter por BehaviorSubject para manejar el estado de forma reactiva
   private loggedIn = new BehaviorSubject<boolean>(this.isLoggedIn());

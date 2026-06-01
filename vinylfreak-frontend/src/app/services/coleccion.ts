@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Injectable, EventEmitter } from '@angular/core';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ColeccionService {
-  private apiUrl = 'https://vinylfreak-backend.onrender.com/coleccion';
+  private apiUrl = `${environment.apiUrl}/api/coleccion`;
   nuevaEntradaEvent = new EventEmitter<void>();
 
   constructor(private http: HttpClient) { }

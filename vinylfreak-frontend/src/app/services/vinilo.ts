@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Vinilo } from '../models/vinilo';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ViniloService {
-  private API_URL = 'https://vinylfreak-backend.onrender.com/vinilos';
+  private API_URL = `${environment.apiUrl}/api/vinilos`;
 
   constructor(private http: HttpClient) {}
 

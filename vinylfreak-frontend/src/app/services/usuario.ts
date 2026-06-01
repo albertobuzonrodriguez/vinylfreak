@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Usuario } from '../models/usuario';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuarioService {
 
-  private API_URL = 'https://vinylfreak-backend.onrender.com/usuarios';
-
+  private API_URL = `${environment.apiUrl}/api/usuarios`;
   constructor(private http: HttpClient) { }
 
   // GET: Traer la lista de usuarios
