@@ -23,7 +23,7 @@ public class ChatController {
     private UsuarioRepository usuarioRepository;
 
     // Endpoint para el historial
-    @GetMapping("/api/mensajes/historial") // 👈 Revisa que la ruta sea EXACTA a la de Angular
+    @GetMapping("/api/mensajes/historial") 
     public List<Mensaje> obtenerHistorial(@RequestParam String u1, @RequestParam String u2) {
         return mensajeRepository.findChatHistory(u1, u2);
     }
