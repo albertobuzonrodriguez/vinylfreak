@@ -1,0 +1,38 @@
+<div class="buscador-container">
+  <div class="search-box">
+    <input
+      type="text"
+      [(ngModel)]="terminoBusqueda"
+      (keyup.enter)="buscar()"
+      placeholder="Escribe y pulsa Enter para buscar..."
+      class="search-input"
+    />
+  </div>
+
+  <div *ngIf="cargando" class="loader">Buscando en Discogs...</div>
+
+  <div class="grid-vinilos" *ngIf="!cargando">
+    <div *ngFor="let disco of resultados" class="vinilo-card">
+      <div class="portada-wrapper">
+        <img
+          [src]="disco.cover_image"
+          alt="Portada"
+          class="portada"
+          (click)="verDetalle(disco.id, disco.cover_image)"
+          style="cursor: pointer"
+        />
+        <div class="overlay">
+          <button (click)="agregarAColeccion(disco)" class="btn-add">+ AÑADIR</button>
+        </div>
+      </div>
+      <div class="info" (click)="verDetalle(disco.id, disco.cover_image)" style="cursor: pointer">
+        <h3>{{ disco.title }}</h3>
+        <p>{{ disco.year }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" *ngIf="mensajeToast">
+    {{ mensajeToast }}
+  </div>
+</div>

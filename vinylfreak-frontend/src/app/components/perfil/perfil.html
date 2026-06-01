@@ -1,0 +1,54 @@
+<div class="perfil-layout" style="max-width: 1200px; margin: 40px auto; display: grid; grid-template-columns: 350px 1fr; gap: 30px; padding: 0 20px; font-family: sans-serif;">
+
+  <aside style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); height: fit-content;">
+    <div style="background: #333; height: 100px;"></div>
+    <div style="padding: 0 30px 30px 30px; text-align: center; margin-top: -50px;">
+      <img [src]="usuario.urlFotoPerfil || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'"
+           style="width: 120px; height: 120px; border-radius: 50%; border: 5px solid white; object-fit: cover; background: #eee; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+
+      <h2 style="margin: 15px 0 5px 0; color: #222; font-size: 1.5rem;">{{ usuario.username }}</h2>
+      <p style="color: #888; font-size: 0.9rem; margin-bottom: 20px;">{{ usuario.email }}</p>
+
+      <div *ngIf="!editando">
+        <p style="text-align: left; color: #444; line-height: 1.6; font-size: 0.95rem; background: #fcfcfc; padding: 15px; border-radius: 12px; border: 1px solid #f0f0f0;">
+          {{ usuario.biografia || 'Aún no has escrito tu biografía. ¡Cuéntanos qué música te gusta!' }}
+        </p>
+        <button (click)="toggleEdicion()" style="width: 100%; margin-top: 20px; padding: 12px; border-radius: 10px; border: 1px solid #ddd; background: white; cursor: pointer; font-weight: 600;">
+          Ajustes de Perfil
+        </button>
+      </div>
+
+      <div *ngIf="editando" style="text-align: left; display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
+        <label style="font-size: 0.75rem; font-weight: bold; color: #999;">BIOGRAFÍA</label>
+        <textarea [(ngModel)]="usuario.biografia" rows="4" style="padding: 10px; border-radius: 8px; border: 1px solid #eee; background: #f9f9f9; resize: none;"></textarea>
+        <div style="display: flex; gap: 10px; margin-top: 5px;">
+          <button (click)="guardarCambios()" style="flex: 2; padding: 10px; background: #222; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">Guardar</button>
+          <button (click)="toggleEdicion()" style="flex: 1; padding: 10px; background: #eee; border: none; border-radius: 8px; cursor: pointer;">X</button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main style="display: flex; flex-direction: column; gap: 30px;">
+    <section style="background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
+      <h3 style="margin: 0 0 25px 0; color: #333; font-size: 1.2rem; border-left: 4px solid #ff4500; padding-left: 15px;">Mi Biblioteca</h3>
+
+      <div style="display: grid; grid-template-columns: 1fr 220px; gap: 30px; align-items: center;">
+        <div style="height: 280px; position: relative;">
+          <canvas id="canvasGeneros" [style.display]="vinilosColeccion.length > 0 ? 'block' : 'none'"></canvas>
+
+          <div *ngIf="vinilosColeccion.length === 0" style="display: flex; align-items: center; justify-content: center; height: 100%; color: #999; text-align: center; border: 2px dashed #f0f0f0; border-radius: 15px;">
+            <p>Tu colección está vacía.<br><small>Añade vinilos para ver tus estadísticas.</small></p>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <div style="background: #fff5f2; padding: 20px; border-radius: 20px; text-align: center; border: 1px solid #ffece6;">
+            <span style="display: block; font-size: 2rem; font-weight: bold; color: #ff4500;">{{ vinilosColeccion.length }}</span>
+            <small style="color: #ff4500; font-weight: 700; letter-spacing: 1px;">VINILOS</small>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>

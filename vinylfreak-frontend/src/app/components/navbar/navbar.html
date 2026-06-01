@@ -1,0 +1,62 @@
+<nav class="navbar" *ngIf="sesionActiva() && !esRutaAdmin()">
+  <div class="nav-container">
+    <div class="nav-brand-container" style="display: flex; align-items: center">
+      <button
+        *ngIf="mostrarFlechaAtras()"
+        (click)="irAtras()"
+        class="btn-back"
+        style="
+          background: none;
+          border: none;
+          color: #ffffff;
+          cursor: pointer;
+          font-size: 1.6rem;
+          margin-right: 15px;
+          padding: 0;
+          line-height: 1;
+        "
+      >
+        ←
+      </button>
+
+      <div class="nav-brand" routerLink="/inicio" style="cursor: pointer">
+        <span class="brand-name">VINYL FREAK</span>
+      </div>
+    </div>
+
+    <div class="nav-center">
+      <ul class="nav-menu">
+        <li><a routerLink="/inicio" routerLinkActive="active">INICIO</a></li>
+        <li><a routerLink="/buscar" routerLinkActive="active">BUSCAR</a></li>
+        <li><a routerLink="/biblioteca" routerLinkActive="active">BIBLIOTECA</a></li>
+        <li><a routerLink="/perfil-ajustes" routerLinkActive="active-link">MI PERFIL</a></li>
+        <li><a routerLink="/usuarios" routerLinkActive="active">COMUNIDAD</a></li>
+        <li><a routerLink="/mensajes" routerLinkActive="active">MENSAJES</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-right" style="display: flex; align-items: center; gap: 20px">
+      <div class="notif-wrapper" style="position: relative">
+        <button
+          (click)="toggleNotificaciones()"
+          class="btn-notif"
+          style="background: none; border: none; color: white; cursor: pointer; font-size: 1.4rem"
+        >
+          🔔
+          <span class="badge" *ngIf="notificacionesSinLeer > 0">{{ notificacionesSinLeer }}</span>
+        </button>
+
+        <div class="dropdown-notif" *ngIf="mostrarNotificaciones">
+          <div class="notif-header">Notificaciones</div>
+          <div class="notif-list">
+            <div *ngFor="let n of notificaciones" class="notif-item">
+              {{ n.mensaje }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button (click)="cerrarSesion()" class="btn-logout">SALIR</button>
+    </div>
+  </div>
+</nav>

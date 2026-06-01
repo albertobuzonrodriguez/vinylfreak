@@ -1,0 +1,91 @@
+<div style="padding: 30px; max-width: 700px; margin: auto; font-family: sans-serif">
+  <input
+    type="text"
+    [(ngModel)]="filtro"
+    (input)="buscar()"
+    placeholder="Busca coleccionistas de vinilos..."
+    style="
+      width: 100%;
+      padding: 15px;
+      border-radius: 30px;
+      border: 2px solid #eee;
+      font-size: 1.1rem;
+      outline: none;
+      transition: border 0.3s;
+    "
+  />
+
+  <div style="margin-top: 30px">
+    <div
+      *ngFor="let u of usuarios"
+      (click)="verPerfil(u.id)"
+      style="
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        background: white;
+        border-radius: 15px;
+        margin-bottom: 15px;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        justify-content: space-between;
+      "
+    >
+      <div style="display: flex; align-items: center">
+        <div
+          style="
+            width: 50px;
+            height: 50px;
+            background: #333;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 20px;
+          "
+        >
+          {{ u.username.charAt(0).toUpperCase() }}
+        </div>
+        <div>
+          <div style="font-weight: bold; color: #222">{{ u.username }}</div>
+          <div style="color: #888; font-size: 0.8rem">Ver colección</div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 10px">
+        <button
+          (click)="seguirUsuario($event, u)"
+          [style.background]="u.siguiendo ? '#e0e0e0' : '#222'"
+          [style.color]="u.siguiendo ? '#333' : 'white'"
+          style="
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+          "
+        >
+          {{ u.siguiendo ? 'Dejar de seguir' : 'Seguir' }}
+        </button>
+
+        <button
+          (click)="irAlChat($event, u.username)"
+          style="
+            background: #d32f2f;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+          "
+        >
+          ✉ Mensaje
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

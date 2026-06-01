@@ -1,0 +1,178 @@
+.feed-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 0 15px;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+}
+
+.feed-title {
+    font-size: 1.8rem;
+    color: #1a1a1a;
+    margin-bottom: 25px;
+    font-weight: 700;
+}
+
+.feed-item {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    margin-bottom: 30px;
+    overflow: hidden;
+    border: 1px solid #f0f0f0;
+}
+
+/* Header */
+.feed-header {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+}
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    background: #ff4b2b;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.username {
+    font-weight: 600;
+    color: #262626;
+}
+
+.action {
+    color: #8e8e8e;
+    font-size: 0.9rem;
+    margin-left: 5px;
+}
+
+/* Content */
+.feed-content img {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+    max-height: 500px;
+}
+
+.vinyl-details {
+    padding: 15px;
+    background: #fafafa;
+}
+
+.vinyl-details h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #262626;
+}
+
+.vinyl-details p {
+    margin: 5px 0 0;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+/* Actions */
+.feed-actions {
+    display: flex;
+    padding: 10px 15px;
+    border-top: 1px solid #eee;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    color: #444;
+    transition: all 0.2s;
+}
+
+.action-btn .icon {
+    font-size: 1.4rem;
+    margin-right: 6px;
+}
+
+.like-btn.active {
+    color: #ed4956; /* Rojo Instagram */
+}
+
+.like-btn.active .icon {
+    transform: scale(1.2);
+}
+
+/* Contenedor principal de comentarios */
+.comments-container {
+    padding: 15px;
+    border-top: 1px solid #efefef;
+    background-color: #fff;
+}
+
+/* Lista de comentarios en vertical */
+.comments-list {
+    display: flex;
+    flex-direction: column; /* Esto los pone uno debajo de otro */
+    gap: 8px;
+    margin-bottom: 15px;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+/* Cada fila de comentario */
+.comment-row {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    display: block; /* Asegura que ocupe toda la línea */
+}
+
+.comment-author {
+    font-weight: 700;
+    color: #262626;
+    margin-right: 8px;
+}
+
+.comment-text {
+    color: #444;
+}
+
+/* Input de comentarios */
+.comment-input-wrapper {
+    display: flex;
+    align-items: center;
+    border-top: 1px solid #efefef;
+    padding-top: 10px;
+}
+
+.comment-input-wrapper input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 0.9rem;
+    padding: 8px 0;
+}
+
+.send-btn {
+    background: none;
+    border: none;
+    color: #0095f6; /* Azul estilo social */
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 0 10px;
+}
+
+.send-btn:disabled {
+    opacity: 0.3;
+}
+
+/* El corazón rojo cuando está activo */
+.like-btn.active {
+    color: #ed4956 !important;
+}

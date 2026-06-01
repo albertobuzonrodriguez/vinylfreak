@@ -1,0 +1,70 @@
+<div class="biblioteca-container">
+  <h2>{{ esPerfilAjeno ? 'Colección del Usuario' : 'Mi Colección Personal' }}</h2>
+
+  <div *ngIf="cargando" class="loader-seccion">
+    <div class="spinner"></div>
+    <p>Conectando con la biblioteca...</p>
+  </div>
+
+  <div *ngIf="!cargando && coleccion.length === 0" class="empty-state-moderno">
+    <h3>{{ esPerfilAjeno ? 'Colección vacía' : 'Tu estantería está esperando' }}</h3>
+    <p>
+      {{
+        esPerfilAjeno
+          ? 'Este melómano aún no ha añadido ninguna joya a su vitrina.'
+          : 'Parece que aún no has añadido ningún vinilo. ¡Empieza a construir tu biblioteca ahora mismo!'
+      }}
+    </p>
+
+    <div class="sugerencias" *ngIf="!esPerfilAjeno">
+      <p>Prueba a buscar:</p>
+      <div class="chips">
+        <span (click)="buscarRapido('Daft Punk')">Daft Punk</span>
+        <span (click)="buscarRapido('Michael Jackson')">Michael Jackson</span>
+        <span (click)="buscarRapido('The Beatles')">The Beatles</span>
+      </div>
+    </div>
+
+    <a *ngIf="!esPerfilAjeno" routerLink="/buscar" class="btn-principal-pro">IR AL BUSCADOR</a>
+    <a *ngIf="esPerfilAjeno" routerLink="/usuarios" class="btn-principal-pro">VOLVER A COMUNIDAD</a>
+  </div>
+
+  <div class="grid-vinilos" *ngIf="!cargando && coleccion.length > 0">
+    <div *ngFor="let item of coleccion" class="card-vinilo">
+      <button
+        *ngIf="!esPerfilAjeno"
+        class="btn-eliminar"
+        (click)="eliminar(item.id, item.vinilo?.titulo || 'Vinilo')"
+        title="Eliminar de mi colección"
+      >
+        ×
+      </button>
+
+      <div class="portada-wrapper">
+        <img
+          [src]="
+            'https://images.weserv.nl/?url=' + item.vinilo?.urlPortada + '&w=300&h=300&fit=cover'
+          "
+          alt="Portada"
+          onerror="this.src = 'assets/no-cover.png'"
+        />
+      </div>
+
+      <div class="info-biblioteca">
+        <h3>{{ item.vinilo?.titulo }}</h3>
+        <p class="artista">{{ item.vinilo?.artista }}</p>
+
+        <div class="meta-data">
+          <div class="meta-row">
+            <span>Estado:</span>
+            <span class="badge-estado">{{ item.estado }}</span>
+          </div>
+          <div class="meta-row">
+            <span>Adquirido:</span>
+            <span>{{ item.fechaAdquirido | date: 'dd/MM/yyyy' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

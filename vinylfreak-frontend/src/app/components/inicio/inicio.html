@@ -1,0 +1,74 @@
+<div class="feed-container">
+  <h1 class="feed-title">Novedades de tu red</h1>
+
+  <div *ngIf="cargando" class="loader-container">
+    <div class="spinner"></div>
+    <p>Cargando noticias...</p>
+  </div>
+
+  <div *ngIf="!cargando && feed.length === 0" class="empty-feed">
+    <p>Aún no hay novedades. ¡Sigue a más coleccionistas para ver sus vinilos!</p>
+    <button class="btn-explore" routerLink="/usuarios">Buscar usuarios</button>
+  </div>
+
+  <div class="feed-list" *ngIf="!cargando && feed.length > 0">
+    <div class="feed-item" *ngFor="let item of feed">
+      <div class="feed-header">
+        <div class="user-avatar">{{ item.usuario?.username?.charAt(0).toUpperCase() }}</div>
+        <div class="user-info">
+          <span class="username">{{ item.usuario?.username }}</span>
+          <span class="action">ha añadido un nuevo vinilo</span>
+        </div>
+      </div>
+
+      <div class="feed-content">
+        <img [src]="item.vinilo?.urlPortada || 'assets/default-vinyl.png'" alt="Portada" />
+        <div class="vinyl-details">
+          <h3>{{ item.vinilo?.titulo }}</h3>
+          <p>{{ item.vinilo?.artista }}</p>
+        </div>
+      </div>
+
+      <div class="feed-actions">
+        <button
+          class="action-btn like-btn"
+          [class.active]="yaTieneLike(item)"
+          (click)="darLike(item)"
+        >
+          <span class="icon">❤</span>
+          <span class="count">{{ item.likesUsuarios?.length || 0 }}</span>
+        </button>
+        <button class="action-btn comment-btn" (click)="toggleComentarios(item)">
+          <span class="icon">💬</span>
+          <span class="count">{{ item.comentarios?.length || 0 }}</span>
+        </button>
+      </div>
+
+      <div class="comments-container" *ngIf="item.mostrarComentarios">
+        <div class="comments-list">
+          <div class="comment-row" *ngFor="let c of item.comentarios">
+            <span class="comment-author">{{ c.username }}</span>
+            <span class="comment-text">{{ c.texto }}</span>
+          </div>
+        </div>
+
+        <div class="comment-input-wrapper">
+          <input
+            #nuevoComentario
+            type="text"
+            placeholder="Añade un comentario..."
+            (keyup.enter)="
+              enviarComentario(item, nuevoComentario.value); nuevoComentario.value = ''
+            "
+          />
+          <button
+            class="send-btn"
+            (click)="enviarComentario(item, nuevoComentario.value); nuevoComentario.value = ''"
+          >
+            Publicar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

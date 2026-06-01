@@ -1,0 +1,74 @@
+<div class="messaging-layout">
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h2>Conversaciones</h2>
+    </div>
+    <div class="contacts-list">
+      <div
+        *ngFor="let contacto of listaContactos"
+        (click)="seleccionarContacto(contacto)"
+        class="contact-card"
+        [class.active]="contacto === receptorUsername"
+      >
+        <div class="avatar-circle">
+          {{ contacto.charAt(0).toUpperCase() }}
+        </div>
+        <div class="contact-name">{{ contacto }}</div>
+      </div>
+
+      <div *ngIf="listaContactos.length === 0" class="empty-state">No hay chats activos</div>
+    </div>
+  </div>
+
+  <div class="chat-panel">
+    <ng-container *ngIf="receptorUsername; else noSelection">
+      <div class="chat-header">
+        <div class="online-indicator"></div>
+        <span
+          >Chat con <strong>{{ receptorUsername }}</strong></span
+        >
+      </div>
+
+      <div class="chat-messages" #scrollMe>
+        <div
+          *ngFor="let msg of mensajes"
+          class="msg-wrapper"
+          [ngClass]="{
+            'msg-mio': msg.remitente?.username === usuarioLogueado?.username,
+            'msg-tuyo': msg.remitente?.username !== usuarioLogueado?.username,
+          }"
+        >
+          <div class="msg-bubble">
+            <div class="msg-text">{{ msg.contenido }}</div>
+            <div class="msg-time">{{ msg.fechaEnvio | date: 'HH:mm' }}</div>
+          </div>
+        </div>
+
+        <div *ngIf="mensajes.length > 0" style="color: transparent; font-size: 1px">
+          DEBUG: Hay {{ mensajes.length }} mensajes cargados.
+        </div>
+      </div>
+      <div class="chat-input-container">
+        <input
+          [(ngModel)]="nuevoMensaje"
+          (keydown.enter)="$event.preventDefault(); enviar()"
+          placeholder="Escribe un mensaje..."
+          autocomplete="off"
+        />
+        <button (click)="enviar()" [disabled]="!nuevoMensaje.trim()">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
+          </svg>
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-template #noSelection>
+      <div class="welcome-container">
+        <div class="welcome-icon">✉</div>
+        <h3>Bandeja de Entrada</h3>
+        <p>Selecciona una conversación de la izquierda para empezar.</p>
+      </div>
+    </ng-template>
+  </div>
+</div>

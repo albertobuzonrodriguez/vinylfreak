@@ -1,0 +1,92 @@
+<div class="admin-wrapper">
+  <header class="admin-header">
+    <div class="header-title">Panel de Control Global — Vinyl Freak</div>
+  </header>
+
+  <div class="admin-container">
+    <div class="stats-grid" *ngIf="stats">
+      <div class="stat-card">
+        <h3>Usuarios en la Red</h3>
+        <p class="number">{{ stats.usuariosTotales }}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Catálogo Indexado</h3>
+        <p class="number">{{ stats.vinilosTotales }}</p>
+      </div>
+    </div>
+
+    <div class="management-card">
+      <div class="card-header">
+        <h2>Añadir Nuevo Miembro de la Comunidad</h2>
+      </div>
+      <form (ngSubmit)="registrarUsuarioAdmin()" class="admin-form">
+        <input
+          type="text"
+          [(ngModel)]="nuevoUsuario.username"
+          name="username"
+          placeholder="Nombre de usuario"
+          required
+        />
+        <input
+          type="email"
+          [(ngModel)]="nuevoUsuario.email"
+          name="email"
+          placeholder="Correo electrónico"
+          required
+        />
+        <input
+          type="password"
+          [(ngModel)]="nuevoUsuario.password"
+          name="password"
+          placeholder="Contraseña de acceso"
+          required
+        />
+        <button type="submit" class="btn-create">➕ Registrar</button>
+      </form>
+    </div>
+
+    <div class="management-card">
+      <div class="card-header">
+        <h2>Listado y Moderación de Usuarios</h2>
+      </div>
+      <div class="table-responsive">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre de Usuario</th>
+              <th>Correo Electrónico</th>
+              <th>Rol / Estado</th>
+              <th class="text-center">Acciones operativas</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let u of usuarios">
+              <td class="user-id">#{{ u.id }}</td>
+              <td class="user-name">
+                <div class="avatar-mini">{{ u.username?.charAt(0).toUpperCase() }}</div>
+                <span>{{ u.username }}</span>
+              </td>
+              <td class="user-email">{{ u.email }}</td>
+              <td>
+                <span class="status-badge" [class.badge-admin]="u.username === 'admin'">
+                  {{ u.username === 'admin' ? 'Administrador' : 'Coleccionista' }}
+                </span>
+              </td>
+              <td class="text-center">
+                <button
+                  *ngIf="u.username !== 'admin'"
+                  class="btn-action-delete"
+                  (click)="eliminarUsuario(u.id)"
+                >
+                  🗑️ Eliminar Perfil
+                </button>
+                <span *ngIf="u.username === 'admin'" class="system-protected">Protegido</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
