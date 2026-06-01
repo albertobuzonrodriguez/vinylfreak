@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment.prod';
+
 
 @Component({
   selector: 'app-admin',
@@ -18,8 +20,9 @@ export class Admin implements OnInit {
     password: ''
   };
 
-  private ADMIN_API = 'http://localhost:8080/api/admin';
-  private AUTH_API = 'http://localhost:8080/api/auth'; 
+  // Construimos las URLs dinámicamente usando la variable de Render
+  private ADMIN_API = `${environment.apiUrl}/api/admin`;
+  private AUTH_API = `${environment.apiUrl}/api/auth`;
 
   constructor(private http: HttpClient) {}
 
@@ -33,14 +36,13 @@ export class Admin implements OnInit {
   }
 
   cargarUsuarios() {
-    // Reutiliza tu endpoint genérico del backend que devuelve la lista de usuarios
-    this.http.get<any[]>('http://localhost:8080/api/usuarios').subscribe(data => this.usuarios = data);
+    // Corregido también este endpoint para que apunte al backend en producción
+    this.http.get<any[]>(`${environment.apiUrl}/api/usuarios`).subscribe(data => this.usuarios = data);
   }
 
   registrarUsuarioAdmin() {
     if (!this.nuevoUsuario.username || !this.nuevoUsuario.email || !this.nuevoUsuario.password) return;
 
-    // Reutilizamos tu lógica de registro en el backend
     this.http.post(`${this.AUTH_API}/registro`, this.nuevoUsuario).subscribe({
       next: () => {
         alert('Usuario creado con éxito en la base de datos');
@@ -48,7 +50,7 @@ export class Admin implements OnInit {
         this.cargarUsuarios(); // Refrescar la tabla
         this.cargarStats();    // Refrescar los números
       },
-      error: (err) => alert('Error al crear el usuario: ' + err.error?.mensaje || 'Datos duplicados')
+      error: (err) => alert('Error al crear el usuario: ' + (err.error?.mensaje || 'Datos duplicados'))
     });
   }
 
