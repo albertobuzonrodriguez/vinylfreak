@@ -16,10 +16,6 @@ export class ViniloService {
     return this.http.get<Vinilo[]>(this.API_URL);
   }
 
-  /**
-   * Envía el vinilo al backend.
-   * IMPORTANTE: El objeto vinilo debe llevar: usuario: { username: '...' }
-   */
   crearVinilo(vinilo: any): Observable<Vinilo> {
     return this.http.post<Vinilo>(`${this.API_URL}/guardar`, vinilo);
   }
@@ -27,8 +23,6 @@ export class ViniloService {
   getFeed(username: string): Observable<Vinilo[]> {
     return this.http.get<Vinilo[]>(`${this.API_URL}/feed/${username}`);
   }
-
-  // Añadir a vinilo.service.ts
 
   toggleLike(itemId: number, usuarioId: number): Observable<any> {
     return this.http.post(`${this.API_URL}/${itemId}/like?usuarioId=${usuarioId}`, {});

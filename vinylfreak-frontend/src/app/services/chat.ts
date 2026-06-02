@@ -14,9 +14,9 @@ export class ChatService {
 
   constructor() {
     this.stompClient = new Client({
-      webSocketFactory: () => new SockJS('https://vinylfreak-backend.onrender.com/api/ws-vinyl'),
+      webSocketFactory: () => new SockJS(`${environment.apiUrl}/api/ws-vinyl`),
       onConnect: () => {
-        console.log('Conectado al WebSocket');
+        console.log('Conectado al WebSocket de VinylFreak');
         this.stompClient.subscribe('/topic/mensajes', (mensaje) => {
           this.messageSource.next(JSON.parse(mensaje.body));
         });

@@ -9,7 +9,6 @@ import { environment } from '../../environments/environment.prod';
 export class AuthService {
   private apiUrl = `${environment.apiUrl}/api/usuarios`;
 
-  // Cambiamos EventEmitter por BehaviorSubject para manejar el estado de forma reactiva
   private loggedIn = new BehaviorSubject<boolean>(this.isLoggedIn());
   loginEvent = this.loggedIn.asObservable();
 
@@ -19,9 +18,7 @@ export class AuthService {
     if (typeof window !== 'undefined' && window.localStorage) {
       const user = localStorage.getItem('usuario_logeado');
 
-      // Si el valor es nulo, vacío o literal "undefined", devolvemos FALSE
       if (!user || user === 'undefined' || user === 'null' || user === '{}' || user === '') {
-        // Limpiamos el rastro corrupto para que no vuelva a molestar
         localStorage.removeItem('usuario_logeado');
         return false;
       }
@@ -30,13 +27,12 @@ export class AuthService {
         const parsed = JSON.parse(user);
         return !!parsed && Object.keys(parsed).length > 0;
       } catch (e) {
-        return false; // Si el JSON está mal formado, no está logueado
+        return false;
       }
     }
     return false;
   }
 
-  // Este método ahora actualiza el "cartel" (Subject) para que todos se enteren
   actualizarEstadoSesion(estado: boolean) {
     if (typeof window !== 'undefined') {
       if (!estado) {
@@ -54,7 +50,6 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/registro`, usuario);
   }
 
-  // Método auxiliar para obtener el usuario guardado (útil para las gráficas después)
   getUsuarioLogeado(): any {
     if (typeof window !== 'undefined') {
       const user = localStorage.getItem('usuario_logeado');
