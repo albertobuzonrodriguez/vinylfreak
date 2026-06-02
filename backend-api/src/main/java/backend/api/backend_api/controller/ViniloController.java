@@ -4,7 +4,6 @@ import backend.api.backend_api.model.ColeccionItem;
 import backend.api.backend_api.model.Comentario;
 import backend.api.backend_api.model.Notificacion; 
 import backend.api.backend_api.model.Usuario;
-import backend.api.backend_api.model.Vinilo;
 import backend.api.backend_api.repository.ColeccionRepository;
 import backend.api.backend_api.repository.NotificacionRepository;
 import backend.api.backend_api.repository.UsuarioRepository;
@@ -12,14 +11,18 @@ import backend.api.backend_api.repository.ViniloRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
 @RestController
 @RequestMapping("/api/vinilos")
-@CrossOrigin(origins = {"http://localhost:4200", "https://vinylfreak.onrender.com"})
+// ─── SEGURIDAD CORS UNIFICADA PARA PRODUCCIÓN ─────────────────────────
+@CrossOrigin(origins = {
+    "http://localhost:4200", 
+    "https://vinylfreak.onrender.com",
+    "https://vinylfreak-frontend.onrender.com"
+})
 public class ViniloController {
 
     @Autowired
@@ -55,7 +58,6 @@ public class ViniloController {
         } else {
             item.getLikesUsuarios().add(usuarioId);
             
-            // 🔔 NOTIFICACIÓN: Solo si el que da like no es el dueño
             if (!item.getUsuario().getId().equals(usuarioId)) {
                 Notificacion n = new Notificacion();
                 n.setUsernameDestino(item.getUsuario().getUsername());
@@ -76,7 +78,6 @@ public class ViniloController {
         ColeccionItem item = coleccionRepository.findById(itemId)
                 .orElseThrow(() -> new RuntimeException("Item no encontrado"));
 
-        // Asegúrate de que el comentario tiene la fecha actual
         if (comentario.getFecha() == null) {
             comentario.setFecha(LocalDateTime.now());
         }
@@ -84,7 +85,6 @@ public class ViniloController {
         item.getComentarios().add(comentario);
         coleccionRepository.save(item);
 
-        // 🔔 NOTIFICACIÓN: Al dueño del vinilo si el comentario es de otro
         if (!item.getUsuario().getUsername().equals(comentario.getUsername())) {
             Notificacion n = new Notificacion();
             n.setUsernameDestino(item.getUsuario().getUsername());

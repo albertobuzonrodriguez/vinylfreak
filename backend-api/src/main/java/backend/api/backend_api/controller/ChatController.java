@@ -1,4 +1,4 @@
-package backend.api.backend_api.controller; // Revisa que tu package sea correcto
+package backend.api.backend_api.controller;
 
 import backend.api.backend_api.model.Mensaje;
 import backend.api.backend_api.model.Usuario;
@@ -8,12 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200", "https://vinylfreak.onrender.com"})
+// ─── SEGURIDAD CORS UNIFICADA PARA PRODUCCIÓN ─────────────────────────
+@CrossOrigin(origins = {
+    "http://localhost:4200", 
+    "https://vinylfreak.onrender.com",
+    "https://vinylfreak-frontend.onrender.com"
+})
 public class ChatController {
 
     @Autowired
@@ -22,19 +26,16 @@ public class ChatController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    // Endpoint para el historial
     @GetMapping("/api/mensajes/historial") 
     public List<Mensaje> obtenerHistorial(@RequestParam String u1, @RequestParam String u2) {
         return mensajeRepository.findChatHistory(u1, u2);
     }
 
-    // Endpoint para la lista lateral de conversaciones
     @GetMapping("/api/mensajes/conversaciones/{username}")
     public List<Mensaje> obtenerConversaciones(@PathVariable String username) {
         return mensajeRepository.findByRemitenteUsernameOrDestinatarioUsernameOrderByFechaEnvioDesc(username, username);
     }
 
-    // Lógica de WebSockets para enviar mensajes
     @MessageMapping("/chat")
     @SendTo("/topic/mensajes")
     public Mensaje gestionarMensaje(Mensaje mensaje) {

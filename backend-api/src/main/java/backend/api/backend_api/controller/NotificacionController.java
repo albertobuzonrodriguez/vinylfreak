@@ -1,6 +1,5 @@
 package backend.api.backend_api.controller;
 
-// IMPORTANTE: Asegúrate de que este sea el único import de Notificacion
 import backend.api.backend_api.model.Notificacion; 
 import backend.api.backend_api.repository.NotificacionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,15 +8,19 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/notificaciones")
-@CrossOrigin(origins = {"http://localhost:4200", "https://vinylfreak.onrender.com"})
+// ─── SEGURIDAD CORS UNIFICADA PARA PRODUCCIÓN ─────────────────────────
+@CrossOrigin(origins = {
+    "http://localhost:4200", 
+    "https://vinylfreak.onrender.com",
+    "https://vinylfreak-frontend.onrender.com"
+})
 public class NotificacionController {
 
     @Autowired
-    private NotificacionRepository notificacionRepository; // La variable debe ser en minúscula
+    private NotificacionRepository notificacionRepository;
 
     @GetMapping("/{username}")
     public List<Notificacion> obtenerNotificaciones(@PathVariable String username) {
-        // Usa la variable inyectada 'notificacionRepository', NO el nombre de la clase
         return notificacionRepository.findByUsernameDestinoOrderByFechaDesc(username);
     }
 

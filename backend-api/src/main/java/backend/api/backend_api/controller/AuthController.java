@@ -15,7 +15,12 @@ import java.util.Collections;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin 
+// ─── SEGURIDAD CORS UNIFICADA PARA PRODUCCIÓN ─────────────────────────
+@CrossOrigin(origins = {
+    "http://localhost:4200", 
+    "https://vinylfreak.onrender.com",
+    "https://vinylfreak-frontend.onrender.com"
+})
 public class AuthController {
 
     @Value("${google.clientId}")
@@ -41,12 +46,9 @@ public class AuthController {
             String nombre = (String) payload.get("name");
             String foto = (String) payload.get("picture");
 
-            // ✅ Usamos el servicio de usuarios para la lógica de negocio
             Usuario usuario = usuarioService.obtenerOCrearUsuarioGoogle(email, nombre, foto);
-
             return ResponseEntity.ok(usuario);
         } else {
-            // ✅ Es necesario retornar un error si el token es nulo
             return ResponseEntity.status(401).body("Token de Google inválido");
         }
     }

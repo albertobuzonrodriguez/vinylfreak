@@ -7,20 +7,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/coleccion")
-@CrossOrigin(origins = {"http://localhost:4200", "https://vinylfreak.onrender.com"})
+// ─── SEGURIDAD CORS UNIFICADA PARA PRODUCCIÓN ─────────────────────────
+@CrossOrigin(origins = {
+    "http://localhost:4200", 
+    "https://vinylfreak.onrender.com",
+    "https://vinylfreak-frontend.onrender.com"
+})
 public class ColeccionController {
 
     @Autowired
     private ColeccionService coleccionService;
 
-    /**
-     * Añade un vinilo desde el buscador de Discogs a la colección del usuario.
-     */
     @PostMapping("/add-from-discogs")
     public ResponseEntity<ColeccionItem> añadirDesdeDiscogs(
             @RequestBody Vinilo vinilo, 
@@ -35,18 +36,11 @@ public class ColeccionController {
         }
     }
 
-    /**
-     * Obtiene todos los ítems de la biblioteca de un usuario específico.
-     */
     @GetMapping("/usuario/{id}")
     public List<ColeccionItem> verBiblioteca(@PathVariable Long id) {
-        // Asegúrate de que el método en ColeccionService se llame exactamente así
         return coleccionService.obtenerBibliotecaUsuario(id);
     }
 
-    /**
-     * Elimina un ítem de la colección.
-     */
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<?> eliminarItem(@PathVariable Long id) {
         try {

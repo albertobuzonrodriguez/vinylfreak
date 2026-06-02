@@ -9,7 +9,12 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/admin")
-@CrossOrigin(origins = {"http://localhost:4200", "https://vinylfreak.onrender.com"})
+// ─── SEGURIDAD CORS UNIFICADA PARA PRODUCCIÓN ─────────────────────────
+@CrossOrigin(origins = {
+    "http://localhost:4200", 
+    "https://vinylfreak.onrender.com",
+    "https://vinylfreak-frontend.onrender.com"
+})
 public class AdminController {
 
     @Autowired
@@ -19,7 +24,6 @@ public class AdminController {
     @Autowired
     private ColeccionRepository coleccionRepository;
 
-    // 1. Obtener estadísticas del sitio
     @GetMapping("/stats")
     public ResponseEntity<Map<String, Long>> getStats() {
         Map<String, Long> stats = new HashMap<>();
@@ -29,7 +33,6 @@ public class AdminController {
         return ResponseEntity.ok(stats);
     }
 
-    // 2. Banear/Eliminar un usuario
     @DeleteMapping("/usuarios/{id}")
     public ResponseEntity<?> eliminarUsuario(@PathVariable Long id) {
         if (!usuarioRepository.existsById(id)) {
