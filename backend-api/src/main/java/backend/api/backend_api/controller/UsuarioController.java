@@ -12,7 +12,13 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/usuarios")
-@CrossOrigin(origins = {"http://localhost:4200", "https://vinylfreak.onrender.com"})
+// ─── CONFIGURACIÓN DE CORS GLOBAL PARA EL CONTROLADOR ─────────────────
+// Añadimos tu URL definitiva de Render para que la API acepte las peticiones del Front
+@CrossOrigin(origins = {
+    "http://localhost:4200", 
+    "https://vinylfreak.onrender.com",
+    "https://vinylfreak-frontend.onrender.com"
+})
 public class UsuarioController {
 
     @Autowired
@@ -21,16 +27,25 @@ public class UsuarioController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    /**
+     * GET: Recupera el listado completo de usuarios registrados.
+     */
     @GetMapping
     public List<Usuario> listarUsuarios() {
         return usuarioService.obtenerTodos();
     }
 
+    /**
+     * POST: Registra un nuevo usuario en la base de datos de PostgreSQL.
+     */
     @PostMapping
     public Usuario crearUsuario(@RequestBody Usuario usuario) {
         return usuarioService.guardarUsuario(usuario);
     }
 
+    /**
+     * POST: Gestiona la rutina de login comprobando las credenciales hashificadas.
+     */
     @PostMapping("/login")
     public ResponseEntity<Usuario> login(@RequestBody Usuario loginData) {
         Usuario usuario = usuarioService.validarLogin(loginData.getUsername(), loginData.getPassword());
@@ -41,11 +56,18 @@ public class UsuarioController {
         }
     }
 
+    /**
+     * GET: Motor de búsqueda por coincidencia parcial e insensible a mayúsculas/minúsculas.
+     * Mapea perfectamente con el parámetro '?nombre=' que envía tu Angular.
+     */
     @GetMapping("/buscar")
     public ResponseEntity<List<Usuario>> buscarUsuarios(@RequestParam String nombre) {
         return ResponseEntity.ok(usuarioRepository.findByUsernameContainingIgnoreCase(nombre));
     }
 
+    /**
+     * PUT: Actualiza la información cualitativa del perfil del coleccionista (Biografía y Avatar).
+     */
     @PutMapping("/{id}/actualizar-perfil")
     public ResponseEntity<Usuario> actualizarPerfil(@PathVariable Long id, @RequestBody Usuario datos) {
         return usuarioRepository.findById(id).map(usuario -> {
@@ -56,7 +78,9 @@ public class UsuarioController {
         }).orElse(ResponseEntity.notFound().build());
     }
 
-    // --- NUEVO: MÉTODO PARA SEGUIR / DEJAR DE SEGUIR ---
+    /**
+     * POST: Mecanismo de red social para seguir o dejar de seguir a otro miembro de la comunidad.
+     */
     @PostMapping("/{username}/seguir")
     public ResponseEntity<?> toggleSeguir(@PathVariable String username, @RequestBody Map<String, String> body) {
         String seguidorUsername = body.get("seguidorUsername");
@@ -76,7 +100,9 @@ public class UsuarioController {
         return ResponseEntity.ok().build();
     }
 
-    // --- NUEVO: COMPROBAR SI SIGUES A ALGUIEN ---
+    /**
+     * GET: Verifica si existe una relación de seguimiento activa para mutar el estado de los botones del Front.
+     */
     @GetMapping("/{seguidor}/sigue-a/{seguido}")
     public ResponseEntity<Boolean> comprobarSiSigue(@PathVariable String seguidor, @PathVariable String seguido) {
         Usuario userSeguidor = usuarioRepository.findByUsername(seguidor).orElse(null);
