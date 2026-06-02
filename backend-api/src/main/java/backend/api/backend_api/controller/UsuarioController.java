@@ -30,7 +30,7 @@ public class UsuarioController {
         return usuarioService.obtenerTodos();
     }
 
-    @PostMapping
+    @PostMapping("/registro")
     public Usuario crearUsuario(@RequestBody Usuario usuario) {
         return usuarioService.guardarUsuario(usuario);
     }
